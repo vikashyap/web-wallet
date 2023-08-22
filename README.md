@@ -1,8 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Project Setup and Testing Guide
 
-## Getting Started
+Welcome! This guide will walk you through the process of setting up the project and testing the application.
 
-First, run the development server:
+## Setting Up
+
+### 1. Clone the Repository
+
+To get started, you'll first need to clone the repository:
+
+```bash
+git clone [repository-url]   # Replace [repository-url] with the actual repo link.
+```
+
+### 2. Install Dependencies
+
+Once cloned, navigate to the project directory and run:
+
+```bash
+npm install
+```
+
+### 3. Start the Development Server
+
+You can start the dev server using one of the following commands:
 
 ```bash
 npm run dev
@@ -12,27 +32,32 @@ yarn dev
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Testing the Application
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+We've created two GoerliETH coins for application testing via [Remix Ethereum](https://remix.ethereum.org/#lang=en&optimize=false&runs=200&evmVersion=null):
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+1. [Vik Coin](https://goerli.etherscan.io/address/0xF0A920FF433751497b26ca4b528fD9472cA133D0)
+2. [Eunna Coin](https://goerli.etherscan.io/address/0x6EC23DbA39F0531B64611F984a73FCa080932BB7)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+To work and test these coin transfers:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Visit [Goerli Faucet](https://goerlifaucet.com/).
+2. Add your address.
+3. Request the faucet to send some tokens to your address.
 
-## Learn More
+> **Note:** This application exclusively uses the Goerli provider. No other providers are supplied for different chains. Ensure you're testing on the Goerli network.
 
-To learn more about Next.js, take a look at the following resources:
+Upon logging into the app, you will notice two **ERC20 coins**:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Vik Coin**
+2. **Eunna Coin**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Architecture Details
 
-## Deploy on Vercel
+- **State Management:** The application leverages [Zustand](https://github.com/pmndrs/zustand) for global state management. It offers a reduced amount of boilerplate compared to other state management tools like Redux or Recoil. We chose not to employ react-query since wagmi js met most of our requirements.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Business Logic:** All business logic can be found within custom hooks in the `hooks` folder. Organizing logic in this manner simplifies maintenance, facilitates logic reuse, and is advantageous for unit testing. However, please note that no test cases have been written as of now. Despite this, the operational business design allows for simpler test case and E2E test case composition.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Design:** The app's aesthetics have been enhanced using [Tailwind CSS](https://tailwindcss.com/).
+
+Happy coding and testing! If you encounter any issues or have feedback, please feel free to raise them in the repository's issues section.
