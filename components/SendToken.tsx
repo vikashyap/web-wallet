@@ -1,15 +1,7 @@
-import { useCryptoStore } from "@/store/CryptoStore";
-import { ERC20_TOKENS_TYPE } from "@/types/crypto";
-import { FC, useEffect, useState } from "react";
-import { parseEther } from "viem";
-import {
-  useAccount,
-  useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
-} from "wagmi";
+import { FC } from "react";
 
-type ResetFunction = () => void;
+import { useSendToken } from "@/hooks/useSendToken";
+import { ERC20_TOKENS_TYPE } from "@/types/crypto";
 
 type FormData = {
   addressTo: string;
@@ -23,72 +15,7 @@ interface SendTokenProps {
 }
 
 export const SendToken: FC<SendTokenProps> = (props) => {
-  const { selectedToken, isValid, formData } = props;
-  const { addressTo, amount } = formData;
-  // Zustand store actions
-
-  const setTransactionHash = useCryptoStore(
-    (state) => state.setTransactionHash
-  );
-  const removeTransactionHash = useCryptoStore(
-    (state) => state.removeTransactionHash
-  );
-
-  const [lastProcessedHash, setLastProcessedHash] = useState<string | null>(
-    null
-  );
-  const [transactionQueue, setTransactionQueue] = useState<string[]>([]); // List of transaction hashes
-  const [currentTransactionIndex, setCurrentTransactionIndex] =
-    useState<number>(0);
-  const currentTransactionHash = transactionQueue[
-    currentTransactionIndex
-  ] as `0x${string}`;
-
-  const { address: userAddress } = useAccount();
-
-  const { config } = usePrepareContractWrite({
-    address: selectedToken?.token,
-    abi: selectedToken?.abi,
-    functionName: "transferFrom",
-    args: [userAddress, addressTo, parseEther(amount)],
-  });
-
-  const { data: SendTokenData, write: writeTokenData } =
-    useContractWrite(config);
-
-  const { isLoading: isLoadingTransaction, isFetching } = useWaitForTransaction(
-    {
-      confirmations: 1,
-      hash: currentTransactionHash,
-      onSettled(data, error) {
-        removeTransactionHash(currentTransactionHash);
-        setCurrentTransactionIndex((prevIndex) => prevIndex + 1);
-      },
-    }
-  );
-
-  useEffect(() => {
-    if (
-      SendTokenData?.hash &&
-      SendTokenData?.hash !== lastProcessedHash &&
-      selectedToken?.token
-    ) {
-      setTransactionHash({
-        token: selectedToken?.token,
-        hash: SendTokenData?.hash,
-      });
-      // Update the last processed hash
-      setLastProcessedHash(SendTokenData?.hash);
-      setTransactionQueue((prevQueue) => [...prevQueue, SendTokenData?.hash]);
-    }
-  }, [
-    isLoadingTransaction,
-    SendTokenData?.hash,
-    removeTransactionHash,
-    setTransactionHash,
-    selectedToken?.token,
-    lastProcessedHash,
-  ]);
+  const { writeTokenData, selectedToken, isValid } = useSendToken(props); // Custom hook to handle transaction and send token
 
   return (
     <button

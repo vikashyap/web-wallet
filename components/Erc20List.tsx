@@ -1,8 +1,6 @@
-import { useTokenState } from "@/hooks/useTokenState";
-import { useCryptoStore } from "@/store/CryptoStore";
+import { useErc20List } from "@/hooks/useErc20List";
 import { ABI_TYPE } from "@/types/crypto";
-import { FC, useCallback, useEffect, useState } from "react";
-import { useBalance } from "wagmi";
+import { FC } from "react";
 import { Loader } from ".";
 
 interface ERC20ListProps {
@@ -13,39 +11,10 @@ interface ERC20ListProps {
 }
 
 export const Erc20List: FC<ERC20ListProps> = (props) => {
-  const { address, token, name } = props;
+  const { token, name } = props;
 
-  const [isLoading, setIsLoading] = useState(false);
-  const transactions = useCryptoStore((state) => state.transactions);
-  const setTokenData = useCryptoStore((state) => state.setTokenData);
-  const [isSelected, setIsSelected] = useState(false);
-  const updatedToken = useTokenState();
-
-  const handleClick = useCallback(() => {
-    setTokenData(props);
-    setIsSelected((prev) => !prev);
-  }, [props, setTokenData]);
-
-  const isLoadingForToken = useCallback(
-    (token: string) => {
-      return transactions.some(
-        (transaction) => transaction.token === token && !!transaction.hash
-      );
-    },
-    [transactions]
-  );
-
-  const { data: tokenData } = useBalance({
-    address,
-    token,
-    watch: true,
-  });
-
-  useEffect(() => {
-    if (token) {
-      setIsLoading(isLoadingForToken(token));
-    }
-  }, [isLoadingForToken, token, tokenData]);
+  const { isLoading, updatedToken, tokenData, handleClick } =
+    useErc20List(props); // custom hook to handle the load of the token
 
   return (
     <div

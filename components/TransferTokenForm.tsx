@@ -1,13 +1,8 @@
-import { ERC20_TOKENS } from "@/consts/ERC20_TOKENS";
+import { useTransferTokenForm } from "@/hooks/useTransferTokenForm";
 import { ERC20_TOKENS_TYPE } from "@/types/crypto";
-import React, { useEffect, useMemo, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React from "react";
+import { Controller } from "react-hook-form";
 import { SendToken } from "./SendToken";
-
-interface FormData {
-  addressTo: `0x${string}` | string;
-  amount: number;
-}
 
 interface CardProps {
   token: ERC20_TOKENS_TYPE | null;
@@ -16,26 +11,8 @@ interface CardProps {
 export const TransferTokenForm: React.FC<CardProps> = ({
   token: tokenData,
 }) => {
-  const [tokenNameState, setTokenNameState] = useState(tokenData?.name);
-  const [rotateDegree, setRotateDegree] = useState(0);
-  const {
-    control,
-    getValues,
-    formState: { errors, isValid },
-    setValue,
-  } = useForm<FormData>({ mode: "onChange" });
-
-  // Detect a new token name and rotate the card
-  useEffect(() => {
-    if (tokenData?.name !== tokenNameState) {
-      setRotateDegree((prevDegree) => (prevDegree === 0 ? 360 : 0));
-      setTokenNameState(tokenData?.name);
-    }
-  }, [tokenData, tokenNameState]);
-
-  const selectedToken = useMemo(() => {
-    return ERC20_TOKENS.find((data) => data?.token === tokenData?.token);
-  }, [tokenData]);
+  const { control, errors, getValues, isValid, rotateDegree, selectedToken } =
+    useTransferTokenForm({ token: tokenData }); // Custom hook to handle the form
 
   return (
     <div

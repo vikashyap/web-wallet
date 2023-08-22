@@ -4,6 +4,7 @@ import { PiHandCoinsBold } from "react-icons/pi";
 
 import { ERC20_TOKENS } from "@/consts/ERC20_TOKENS";
 import { useTokenState } from "@/hooks/useTokenState";
+import { Toaster } from "react-hot-toast";
 import { useAccount, useBalance } from "wagmi";
 import { Erc20List } from "./Erc20List";
 import { TransferTokenForm } from "./TransferTokenForm";
@@ -18,6 +19,7 @@ export const Welcome = () => {
 
   return (
     <div className="flex w-full justify-center items-center">
+      <Toaster containerClassName="lex w-full justify-center items-center" />
       <div className="flex md:flex-row flex-col items-start justify-between md:p-20 py-12 px-4 flex-grow">
         <div className="flex flex-1 justify-start items-start flex-col md:mr-10">
           <h1 className="text-3xl sm:text-5xl text-white text-gradient py-1">
