@@ -10,8 +10,8 @@ interface CryptoStoreState {
   tokenData: ERC20_TOKENS_TYPE | null;
   setTokenData: (data: ERC20_TOKENS_TYPE | null) => void;
   transactions: TransactionRecord[];
-  setTransactionHash: (record: TransactionRecord) => void; // Renamed to match the interface
-  removeTransactionHash: (hash: string) => void; // Renamed to match the interface
+  setTransactionHash: (record: TransactionRecord) => void;
+  removeTransactionHash: (hash: string) => void;
 }
 
 export const useCryptoStore = create<CryptoStoreState>((set) => ({
