@@ -18,7 +18,7 @@ export const Erc20List: FC<ERC20ListProps> = (props) => {
 
   return (
     <div
-      className={`relative max-w-sm rounded overflow-hidden shadow-lg p-6 m-4outline outline-offset-2 text-white transform transition-transform hover:scale-105 shadow-lg shadow-zinc-500/50 blue-glassmorphism outline-zinc-50 ${
+      className={`relative max-w-sm rounded overflow-hidden shadow-lg p-6 m-4 outline outline-offset-2 text-white transform transition-transform hover:scale-105 shadow-lg shadow-zinc-500/50 blue-glassmorphism outline-zinc-50 ${
         isLoading && "card-border-animation"
       } ${
         updatedToken?.token === token &&
