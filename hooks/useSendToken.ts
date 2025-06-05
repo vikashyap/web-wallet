@@ -47,8 +47,8 @@ export const useSendToken = (props: UseSendTokenProps) => {
   const { config } = usePrepareContractWrite({
     address: selectedToken?.token,
     abi: selectedToken?.abi,
-    functionName: "transferFrom",
-    args: [userAddress, addressTo, parseEther(amount)],
+    functionName: "transfer",
+    args: [addressTo, parseEther(amount)],
   });
 
   const {
